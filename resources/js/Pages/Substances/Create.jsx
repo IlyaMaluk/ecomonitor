@@ -15,7 +15,7 @@ import {
     IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {router, useForm} from '@inertiajs/react';
+import {Link, router, useForm} from '@inertiajs/react';
 
 const CreateSubstance = ({ substances }) => {
     const { data, setData, post, processing, errors } = useForm({
@@ -85,6 +85,18 @@ const CreateSubstance = ({ substances }) => {
                         Создать
                     </Button>
                 </form>
+
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        component={Link}
+                        href="/"
+                        variant="outlined"
+                        fullWidth
+                        sx={{ mt: 2 }}
+                    >
+                        Повернутись на головну
+                    </Button>
+                </Box>
             </Box>
 
             <Box sx={{ mt: 4 }}>

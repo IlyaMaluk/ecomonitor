@@ -22,7 +22,8 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { router, useForm, usePage } from '@inertiajs/react';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { router, useForm, usePage, Link } from '@inertiajs/react';
 
 const EmissionTable = ({ emissions, corporations, substances }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -136,60 +137,108 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                     Добавить новую запись о выбросах
                 </Typography>
                 <form onSubmit={submit} noValidate>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField
+                            select
+                            label="Корпорация"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            value={data.corporation_id}
+                            onChange={(e) => setData('corporation_id', e.target.value)}
+                            error={Boolean(errors.corporation_id)}
+                            helperText={errors.corporation_id}
+                        >
+                            <MenuItem value="">
+                                <em>Выберите корпорацию</em>
+                            </MenuItem>
+                            {corporations.map((corp) => (
+                                <MenuItem key={corp.id} value={corp.id}>
+                                    {corp.title}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <IconButton
+                            color="primary"
+                            component={Link}
+                            href="/corporations" // Route to create a new corporation
+                            sx={{ ml: 2 }}
+                        >
+                            <AddCircleIcon />
+                        </IconButton>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField
+                            select
+                            label="Субстанция"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            value={data.substance_id}
+                            onChange={(e) => setData('substance_id', e.target.value)}
+                            error={Boolean(errors.substance_id)}
+                            helperText={errors.substance_id}
+                        >
+                            <MenuItem value="">
+                                <em>Выберите субстанцию</em>
+                            </MenuItem>
+                            {substances.map((substance) => (
+                                <MenuItem key={substance.id} value={substance.id}>
+                                    {substance.title}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <IconButton
+                            color="primary"
+                            component={Link}
+                            href="/substances" // Route to create a new substance
+                            sx={{ ml: 2 }}
+                        >
+                            <AddCircleIcon />
+                        </IconButton>
+                    </Box>
                     <TextField
                         select
-                        label="Корпорация"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        required
-                        value={data.corporation_id}
-                        onChange={(e) => setData('corporation_id', e.target.value)}
-                        error={Boolean(errors.corporation_id)}
-                        helperText={errors.corporation_id}
-                    >
-                        <MenuItem value="">
-                            <em>Выберите корпорацию</em>
-                        </MenuItem>
-                        {corporations.map((corp) => (
-                            <MenuItem key={corp.id} value={corp.id}>
-                                {corp.title}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <TextField
-                        select
-                        label="Субстанция"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        required
-                        value={data.substance_id}
-                        onChange={(e) => setData('substance_id', e.target.value)}
-                        error={Boolean(errors.substance_id)}
-                        helperText={errors.substance_id}
-                    >
-                        <MenuItem value="">
-                            <em>Выберите субстанцию</em>
-                        </MenuItem>
-                        {substances.map((substance) => (
-                            <MenuItem key={substance.id} value={substance.id}>
-                                {substance.title}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <TextField
                         label="Год"
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         required
-                        type="number"
                         value={data.year}
                         onChange={(e) => setData('year', e.target.value)}
                         error={Boolean(errors.year)}
                         helperText={errors.year}
-                    />
+                        SelectProps={{
+                            MenuProps: {
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200, // Обмежує висоту меню
+                                        width: 'auto', // Ширина меню буде рівною ширині поля
+                                    },
+                                },
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                },
+                                transformOrigin: {
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                },
+                                getContentAnchorEl: null, // Щоб меню з'являлося під полем
+                            },
+                        }}
+                    >
+                        {Array.from({ length: 2024 - 1915 + 1 }, (_, i) => 2024 - i).map((year) => (
+                            <MenuItem key={year} value={year}>
+                                {year}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+
+
                     <TextField
                         label="Объем"
                         variant="outlined"
@@ -373,46 +422,68 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                 <DialogTitle>Редактировать запись о выбросах</DialogTitle>
                 <DialogContent>
                     <form id="edit-form" onSubmit={handleEditSubmit} noValidate>
-                        <TextField
-                            select
-                            label="Корпорация"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            value={editData.corporation_id}
-                            onChange={(e) =>
-                                setEditData({ ...editData, corporation_id: e.target.value })
-                            }
-                            error={Boolean(errors.corporation_id)}
-                            helperText={errors.corporation_id}
-                        >
-                            {corporations.map((corp) => (
-                                <MenuItem key={corp.id} value={corp.id}>
-                                    {corp.title}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <TextField
-                            select
-                            label="Субстанция"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            value={editData.substance_id}
-                            onChange={(e) =>
-                                setEditData({ ...editData, substance_id: e.target.value })
-                            }
-                            error={Boolean(errors.substance_id)}
-                            helperText={errors.substance_id}
-                        >
-                            {substances.map((substance) => (
-                                <MenuItem key={substance.id} value={substance.id}>
-                                    {substance.title}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <TextField
+                                select
+                                label="Корпорация"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                value={editData.corporation_id}
+                                onChange={(e) =>
+                                    setEditData({ ...editData, corporation_id: e.target.value })
+                                }
+                                error={Boolean(errors.corporation_id)}
+                                helperText={errors.corporation_id}
+                            >
+                                {corporations.map((corp) => (
+                                    <MenuItem key={corp.id} value={corp.id}>
+                                        {corp.title}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <IconButton
+                                color="primary"
+                                component={Link}
+                                href="/corporations"
+                                sx={{ ml: 2 }}
+                            >
+                                <AddCircleIcon />
+                            </IconButton>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <TextField
+                                select
+                                label="Субстанция"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                value={editData.substance_id}
+                                onChange={(e) =>
+                                    setEditData({ ...editData, substance_id: e.target.value })
+                                }
+                                error={Boolean(errors.substance_id)}
+                                helperText={errors.substance_id}
+                            >
+                                {substances.map((substance) => (
+                                    <MenuItem key={substance.id} value={substance.id}>
+                                        {substance.title}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <IconButton
+                                color="primary"
+                                component={Link}
+                                href="/substances"
+                                sx={{ ml: 2 }}
+                            >
+                                <AddCircleIcon />
+                            </IconButton>
+                        </Box>
+
                         <TextField
                             label="Год"
                             variant="outlined"
