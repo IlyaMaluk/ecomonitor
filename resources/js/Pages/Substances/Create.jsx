@@ -108,10 +108,10 @@ const CreateSubstance = ({ substances }) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                <TableCell>Название</TableCell>
-                                <TableCell>Класс</TableCell>
-                                <TableCell>ПДК (TLV)</TableCell>
-                                <TableCell align="right">Действия</TableCell>
+                                <TableCell>Назва</TableCell>
+                                <TableCell>Клас</TableCell>
+                                <TableCell>ГДК</TableCell>
+                                <TableCell align="right">Дії</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

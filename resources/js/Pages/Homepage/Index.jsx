@@ -317,7 +317,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         color="primary"
                         sx={{ mt: 2 }}
                     >
-                        Искать
+                        Шукати
                     </Button>
                 </form>
             </Box>
@@ -417,7 +417,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                 </TableContainer>
             </Box>
 
-            {/* Модальное окно для редактирования */}
+
             <Dialog open={isEditModalOpen} onClose={handleEditClose} fullWidth maxWidth="sm">
                 <DialogTitle>Редагувати запис викидів</DialogTitle>
                 <DialogContent>
