@@ -211,25 +211,6 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         onChange={(e) => setData('year', e.target.value)}
                         error={Boolean(errors.year)}
                         helperText={errors.year}
-                        SelectProps={{
-                            MenuProps: {
-                                PaperProps: {
-                                    style: {
-                                        maxHeight: 200, // Обмежує висоту меню
-                                        width: 'auto', // Ширина меню буде рівною ширині поля
-                                    },
-                                },
-                                anchorOrigin: {
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                },
-                                transformOrigin: {
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                },
-                                getContentAnchorEl: null, // Щоб меню з'являлося під полем
-                            },
-                        }}
                     >
                         {Array.from({ length: 2024 - 1915 + 1 }, (_, i) => 2024 - i).map((year) => (
                             <MenuItem key={year} value={year}>
@@ -237,7 +218,6 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             </MenuItem>
                         ))}
                     </TextField>
-
 
                     <TextField
                         label="Об'єм викидів т/рік"
@@ -300,7 +280,6 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                 </form>
             </Box>
 
-            {/* Поле поиска */}
             <Box sx={{ mt: 4 }}>
                 <form onSubmit={handleSearch}>
                     <TextField
@@ -382,8 +361,8 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                                         <TableCell>{emission.substance.title}</TableCell>
                                         <TableCell>{emission.year}</TableCell>
                                         <TableCell>{emission.volume}</TableCell>
-                                        <TableCell>{emission.volume_spent}</TableCell>
-                                        <TableCell>{emission.air_taxes}</TableCell>
+                                        <TableCell>{parseFloat(emission.volume_spent).toFixed(3)}</TableCell> {/* Округлення до 0.000 */}
+                                        <TableCell>{parseFloat(emission.air_taxes).toFixed(2)}</TableCell> {/* Округлення до 0.00 */}
                                         <TableCell>{emission.water_taxes}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
@@ -416,7 +395,6 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                     </Table>
                 </TableContainer>
             </Box>
-
 
             <Dialog open={isEditModalOpen} onClose={handleEditClose} fullWidth maxWidth="sm">
                 <DialogTitle>Редагувати запис викидів</DialogTitle>
@@ -565,3 +543,4 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
 };
 
 export default EmissionTable;
+
