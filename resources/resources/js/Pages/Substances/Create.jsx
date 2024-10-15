@@ -37,11 +37,11 @@ const CreateSubstance = ({ substances }) => {
         <Container maxWidth="sm">
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Додати забруднюючу речовину
+                    Создать субстанцию
                 </Typography>
                 <form onSubmit={submit} noValidate>
                     <TextField
-                        label="Назва"
+                        label="Название"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -52,7 +52,7 @@ const CreateSubstance = ({ substances }) => {
                         helperText={errors.title}
                     />
                     <TextField
-                        label="Клас небезпеки"
+                        label="Класс"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -63,7 +63,7 @@ const CreateSubstance = ({ substances }) => {
                         helperText={errors.class}
                     />
                     <TextField
-                        label="ГДК"
+                        label="ПДК (TLV)"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -82,7 +82,7 @@ const CreateSubstance = ({ substances }) => {
                         sx={{ mt: 2 }}
                         disabled={processing}
                     >
-                        Додати
+                        Создать
                     </Button>
                 </form>
 
@@ -101,7 +101,7 @@ const CreateSubstance = ({ substances }) => {
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    Список забруднюючих речовин
+                    Список субстанций
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
@@ -137,7 +137,7 @@ const CreateSubstance = ({ substances }) => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={5} align="center">
-                                        Нема забруднюючих речовин
+                                        Нет субстанций
                                     </TableCell>
                                 </TableRow>
                             )}

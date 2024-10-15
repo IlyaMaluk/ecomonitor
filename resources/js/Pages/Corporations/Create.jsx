@@ -37,7 +37,7 @@ const CreateCorporation = ({ corporations }) => {
         <Container maxWidth="sm">
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Створити корпорацію
+                    Створити підприємство
                 </Typography>
                 <form onSubmit={submit} noValidate>
                     <TextField
@@ -101,7 +101,7 @@ const CreateCorporation = ({ corporations }) => {
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    Список корпорацій
+                    Список підприємств
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
@@ -137,7 +137,7 @@ const CreateCorporation = ({ corporations }) => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={5} align="center">
-                                        Немає корпорацій
+                                        Немає підприємств
                                     </TableCell>
                                 </TableRow>
                             )}

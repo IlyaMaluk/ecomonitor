@@ -32,8 +32,8 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
         year: '',
         volume: '',
         volume_spent: '',
-        air_taxes: '',
         water_taxes: '',
+        air_taxes: '',
     });
 
     const [editData, setEditData] = useState({
@@ -43,8 +43,8 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
         year: '',
         volume: '',
         volume_spent: '',
-        air_taxes: '',
         water_taxes: '',
+        air_taxes: '',
     });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -81,8 +81,8 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
             year: emission.year,
             volume: emission.volume,
             volume_spent: emission.volume_spent,
-            air_taxes: emission.air_taxes,
             water_taxes: emission.water_taxes,
+            air_taxes: emission.air_taxes,
         });
         setIsEditModalOpen(true);
     };
@@ -134,13 +134,13 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
         <Container maxWidth="lg">
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Додати новий запис викидів
+                    Добавить новую запись о выбросах
                 </Typography>
                 <form onSubmit={submit} noValidate>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             select
-                            label="Підприємство"
+                            label="Корпорация"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -151,7 +151,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             helperText={errors.corporation_id}
                         >
                             <MenuItem value="">
-                                <em>Оберіть підприємство</em>
+                                <em>Выберите корпорацию</em>
                             </MenuItem>
                             {corporations.map((corp) => (
                                 <MenuItem key={corp.id} value={corp.id}>
@@ -172,7 +172,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             select
-                            label="Забруднююча речовина"
+                            label="Субстанция"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -183,7 +183,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             helperText={errors.substance_id}
                         >
                             <MenuItem value="">
-                                <em>Оберіть забруднюючу речовину</em>
+                                <em>Выберите субстанцию</em>
                             </MenuItem>
                             {substances.map((substance) => (
                                 <MenuItem key={substance.id} value={substance.id}>
@@ -202,7 +202,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                     </Box>
                     <TextField
                         select
-                        label="Рік звітності"
+                        label="Год"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -240,7 +240,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
 
 
                     <TextField
-                        label="Об'єм викидів т/рік"
+                        label="Объем"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -252,7 +252,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         helperText={errors.volume}
                     />
                     <TextField
-                        label="Масова витрата г/год"
+                        label="Израсходованный объем"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -264,19 +264,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         helperText={errors.volume_spent}
                     />
                     <TextField
-                        label="Ставка податку(повітря) грн/т"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        required
-                        type="number"
-                        value={data.air_taxes}
-                        onChange={(e) => setData('air_taxes', e.target.value)}
-                        error={Boolean(errors.air_taxes)}
-                        helperText={errors.air_taxes}
-                    />
-                    <TextField
-                        label="Ставка податку(вода) грн/т"
+                        label="Налог на воду"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -287,6 +275,18 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         error={Boolean(errors.water_taxes)}
                         helperText={errors.water_taxes}
                     />
+                    <TextField
+                        label="Налог на воздух"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        type="number"
+                        value={data.air_taxes}
+                        onChange={(e) => setData('air_taxes', e.target.value)}
+                        error={Boolean(errors.air_taxes)}
+                        helperText={errors.air_taxes}
+                    />
                     <Button
                         type="submit"
                         variant="contained"
@@ -295,7 +295,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         sx={{ mt: 2 }}
                         disabled={processing}
                     >
-                        Додати
+                        Добавить
                     </Button>
                 </form>
             </Box>
@@ -304,12 +304,12 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
             <Box sx={{ mt: 4 }}>
                 <form onSubmit={handleSearch}>
                     <TextField
-                        label="Пошук"
+                        label="Поиск"
                         variant="outlined"
                         fullWidth
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
-                        placeholder="Введіть запит для пошуку"
+                        placeholder="Введите запрос для поиска"
                     />
                     <Button
                         type="submit"
@@ -324,22 +324,22 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    Таблиця викидів
+                    Список выбросов
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                <TableCell>Підприємство</TableCell>
-                                <TableCell>Забруднююча речовина</TableCell>
+                                <TableCell>Корпорация</TableCell>
+                                <TableCell>Субстанция</TableCell>
                                 <TableCell>
                                     <TableSortLabel
                                         active={orderColumn === 'year'}
                                         direction={orderDir}
                                         onClick={() => handleSort('year')}
                                     >
-                                        Рік звітності
+                                        Год
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
@@ -348,29 +348,29 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                                         direction={orderDir}
                                         onClick={() => handleSort('volume')}
                                     >
-                                        Об'єм викидів т/рік
+                                        Объем
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>Масова витрата г/год</TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={orderColumn === 'air_taxes'}
-                                        direction={orderDir}
-                                        onClick={() => handleSort('air_taxes')}
-                                    >
-                                        Ставка податку(повітря) грн/т
-                                    </TableSortLabel>
-                                </TableCell>
+                                <TableCell>Израсходовано</TableCell>
                                 <TableCell>
                                     <TableSortLabel
                                         active={orderColumn === 'water_taxes'}
                                         direction={orderDir}
                                         onClick={() => handleSort('water_taxes')}
                                     >
-                                        Ставка податку(вода) грн/т
+                                        Налог на воду
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align="right">Дії</TableCell>
+                                <TableCell>
+                                    <TableSortLabel
+                                        active={orderColumn === 'air_taxes'}
+                                        direction={orderDir}
+                                        onClick={() => handleSort('air_taxes')}
+                                    >
+                                        Налог на воздух
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="right">Действия</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -383,8 +383,8 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                                         <TableCell>{emission.year}</TableCell>
                                         <TableCell>{emission.volume}</TableCell>
                                         <TableCell>{emission.volume_spent}</TableCell>
-                                        <TableCell>{emission.air_taxes}</TableCell>
                                         <TableCell>{emission.water_taxes}</TableCell>
+                                        <TableCell>{emission.air_taxes}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 edge="end"
@@ -408,7 +408,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={9} align="center">
-                                        Нема записів викидів
+                                        Нет записей о выбросах
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -419,13 +419,13 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
 
             {/* Модальное окно для редактирования */}
             <Dialog open={isEditModalOpen} onClose={handleEditClose} fullWidth maxWidth="sm">
-                <DialogTitle>Редагувати запис викидів</DialogTitle>
+                <DialogTitle>Редактировать запись о выбросах</DialogTitle>
                 <DialogContent>
                     <form id="edit-form" onSubmit={handleEditSubmit} noValidate>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <TextField
                                 select
-                                label="Підприємство"
+                                label="Корпорация"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
@@ -456,7 +456,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <TextField
                                 select
-                                label="Забруднююча речовина"
+                                label="Субстанция"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
@@ -485,7 +485,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         </Box>
 
                         <TextField
-                            label="Рік звітності"
+                            label="Год"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -497,7 +497,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             helperText={errors.year}
                         />
                         <TextField
-                            label="Об'єм викидів т/рік "
+                            label="Объем"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -509,7 +509,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             helperText={errors.volume}
                         />
                         <TextField
-                            label="Масова витрата г/год"
+                            label="Израсходованный объем"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -523,7 +523,21 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             helperText={errors.volume_spent}
                         />
                         <TextField
-                            label="Ставка податку(повітря) грн/т"
+                            label="Налог на воду"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            type="number"
+                            value={editData.water_taxes}
+                            onChange={(e) =>
+                                setEditData({ ...editData, water_taxes: e.target.value })
+                            }
+                            error={Boolean(errors.water_taxes)}
+                            helperText={errors.water_taxes}
+                        />
+                        <TextField
+                            label="Налог на воздух"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -536,27 +550,12 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             error={Boolean(errors.air_taxes)}
                             helperText={errors.air_taxes}
                         />
-                        <TextField
-                            label="Ставка податку(вода) грн/т"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.water_taxes}
-                            onChange={(e) =>
-                                setEditData({ ...editData, water_taxes: e.target.value })
-                            }
-                            error={Boolean(errors.water_taxes)}
-                            helperText={errors.water_taxes}
-
-                        />
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEditClose}>Відміна</Button>
+                    <Button onClick={handleEditClose}>Отмена</Button>
                     <Button type="submit" form="edit-form" variant="contained" color="primary">
-                        Зберегти
+                        Сохранить
                     </Button>
                 </DialogActions>
             </Dialog>

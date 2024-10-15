@@ -15,29 +15,29 @@ import {
     IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Link, router, useForm} from '@inertiajs/react';
+import { router, useForm, Link } from '@inertiajs/react';
 
-const CreateSubstance = ({ substances }) => {
+const CreateCorporation = ({ corporations }) => {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
-        class: '',
-        tlv: '',
+        address: '',
+        type: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-        post('/substances');
+        post('/corporations');
     };
 
     const handleDelete = (id) => {
-        router.delete(`/substances/${id}`);
+        router.delete(`/corporations/${id}`);
     };
 
     return (
         <Container maxWidth="sm">
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Додати забруднюючу речовину
+                    Створити корпорацію
                 </Typography>
                 <form onSubmit={submit} noValidate>
                     <TextField
@@ -52,27 +52,26 @@ const CreateSubstance = ({ substances }) => {
                         helperText={errors.title}
                     />
                     <TextField
-                        label="Клас небезпеки"
+                        label="Адреса"
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         required
-                        value={data.class}
-                        onChange={(e) => setData('class', e.target.value)}
-                        error={Boolean(errors.class)}
-                        helperText={errors.class}
+                        value={data.address}
+                        onChange={(e) => setData('address', e.target.value)}
+                        error={Boolean(errors.address)}
+                        helperText={errors.address}
                     />
                     <TextField
-                        label="ГДК"
+                        label="Тип"
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         required
-                        type="number"
-                        value={data.tlv}
-                        onChange={(e) => setData('tlv', e.target.value)}
-                        error={Boolean(errors.tlv)}
-                        helperText={errors.tlv}
+                        value={data.type}
+                        onChange={(e) => setData('type', e.target.value)}
+                        error={Boolean(errors.type)}
+                        helperText={errors.type}
                     />
                     <Button
                         type="submit"
@@ -82,10 +81,11 @@ const CreateSubstance = ({ substances }) => {
                         sx={{ mt: 2 }}
                         disabled={processing}
                     >
-                        Додати
+                        Створити
                     </Button>
                 </form>
 
+                {/* Button to navigate to the / route */}
                 <Box sx={{ mt: 2 }}>
                     <Button
                         component={Link}
@@ -101,33 +101,33 @@ const CreateSubstance = ({ substances }) => {
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    Список забруднюючих речовин
+                    Список корпорацій
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
-                                <TableCell>Название</TableCell>
-                                <TableCell>Класс</TableCell>
-                                <TableCell>ПДК (TLV)</TableCell>
-                                <TableCell align="right">Действия</TableCell>
+                                <TableCell>Назва</TableCell>
+                                <TableCell>Адреса</TableCell>
+                                <TableCell>Тип</TableCell>
+                                <TableCell align="right">Дії</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {substances.length > 0 ? (
-                                substances.map((substance) => (
-                                    <TableRow key={substance.id}>
-                                        <TableCell>{substance.id}</TableCell>
-                                        <TableCell>{substance.title}</TableCell>
-                                        <TableCell>{substance.class}</TableCell>
-                                        <TableCell>{substance.tlv}</TableCell>
+                            {corporations.length > 0 ? (
+                                corporations.map((corp) => (
+                                    <TableRow key={corp.id}>
+                                        <TableCell>{corp.id}</TableCell>
+                                        <TableCell>{corp.title}</TableCell>
+                                        <TableCell>{corp.address}</TableCell>
+                                        <TableCell>{corp.type}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 edge="end"
                                                 aria-label="delete"
                                                 color="error"
-                                                onClick={() => handleDelete(substance.id)}
+                                                onClick={() => handleDelete(corp.id)}
                                             >
                                                 <DeleteIcon />
                                             </IconButton>
@@ -137,7 +137,7 @@ const CreateSubstance = ({ substances }) => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={5} align="center">
-                                        Нема забруднюючих речовин
+                                        Немає корпорацій
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -149,4 +149,4 @@ const CreateSubstance = ({ substances }) => {
     );
 };
 
-export default CreateSubstance;
+export default CreateCorporation;
