@@ -110,7 +110,7 @@ const CreateSubstance = ({ substances }) => {
                                 <TableCell>ID</TableCell>
                                 <TableCell>Назва</TableCell>
                                 <TableCell>Клас</TableCell>
-                                <TableCell>ГДК</TableCell>
+                                <TableCell>ГДК(мг/м^3)</TableCell>
                                 <TableCell align="right">Дії</TableCell>
                             </TableRow>
                         </TableHead>
