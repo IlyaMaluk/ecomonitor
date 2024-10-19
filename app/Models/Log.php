@@ -13,6 +13,7 @@ class Log extends Model
     protected $fillable = [
         'corporation_id',
         'substance_id',
+        'tax_type_id',
         'year',
         'volume',
         'volume_spent',
@@ -28,5 +29,10 @@ class Log extends Model
     public function corporation(): BelongsTo
     {
         return $this->belongsTo(Corporation::class);
+    }
+
+    public function taxType(): BelongsTo
+    {
+        return $this->belongsTo(TaxType::class);
     }
 }

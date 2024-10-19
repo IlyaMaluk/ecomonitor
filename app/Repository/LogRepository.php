@@ -6,26 +6,8 @@ use App\Models\Log;
 use App\Repository\QueryBuilders\LogQueryBuilder;
 use Illuminate\Database\Eloquent\Collection;
 
-class LogRepository
+class LogRepository extends AbstractRepository
 {
-    public function create(array $data): Log
-    {
-        $log = new Log();
-
-        return $this->update($log, $data);
-    }
-
-    public function update(Log $log, array $data): Log
-    {
-        $log->fill($data);
-
-        if (!$log->save()) {
-            throw new \Exception("Failed to update log $log->id");
-        }
-
-        return $log;
-    }
-
     /**
      * @throws \Exception
      */
@@ -38,19 +20,6 @@ class LogRepository
         }
 
         return $this->update($log, $data);
-    }
-
-    public function delete(int $id): bool
-    {
-        $log = Log::query()->find($id);
-
-        if (!$log) {
-            return false;
-        }
-
-        $log->delete();
-
-        return true;
     }
 
     public function getAll(): Collection
@@ -66,5 +35,10 @@ class LogRepository
     public function query(): LogQueryBuilder
     {
         return new LogQueryBuilder();
+    }
+
+    protected function model(): string
+    {
+        return Log::class;
     }
 }

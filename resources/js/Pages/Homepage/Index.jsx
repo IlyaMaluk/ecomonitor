@@ -24,8 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { router, useForm, usePage, Link } from '@inertiajs/react';
-
-const EmissionTable = ({ emissions, corporations, substances }) => {
+const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         corporation_id: '',
         substance_id: '',
@@ -35,6 +34,12 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
         air_taxes: '',
         water_taxes: '',
     });
+
+    console.log(data);
+
+    const [selectedValue, setSelectedValue] = useState('');
+    const [params, setParams] = useState({});
+
 
     const [editData, setEditData] = useState({
         id: null,
@@ -130,6 +135,31 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
         });
     };
 
+    const [selectedTaxFields, setSelectedTaxFields] = useState([]);
+    const [selectableTaxFields, setSelectableTaxFields] = useState(null);
+
+    const handleTaxTypeChange = (e) => {
+        const selectedType = e.target.value;
+        setData({ ...data, tax_type: selectedType });
+
+        const taxType = taxTypes.find(tax => tax.name === selectedType);
+        if (taxType) {
+            const fields = taxType.fields;
+            setSelectedTaxFields(fields.input || []);
+
+            if (Object.keys(fields.selectable).length !== 0) {
+                setSelectableTaxFields(fields.selectable);
+            } else {
+                setSelectableTaxFields(null);
+            }
+        } else {
+            setSelectedTaxFields([]);
+            setSelectableTaxFields(null);
+        }
+    };
+
+    console.log(selectableTaxFields);
+
     return (
         <Container maxWidth="lg">
             <Box sx={{ mt: 4 }}>
@@ -162,7 +192,7 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         <IconButton
                             color="primary"
                             component={Link}
-                            href="/corporations" // Route to create a new corporation
+                            href="/corporations"
                             sx={{ ml: 2 }}
                         >
                             <AddCircleIcon />
@@ -218,7 +248,63 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                             </MenuItem>
                         ))}
                     </TextField>
-
+                    <TextField
+                        select
+                        label="Тип податку"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        value={data.tax_type}
+                        onChange={handleTaxTypeChange}
+                    >
+                        <MenuItem value="">
+                            <em>Оберіть тип податку</em>
+                        </MenuItem>
+                        {taxTypes.map((tax) => (
+                            <MenuItem key={tax.name} value={tax.name}>
+                                {tax.real_name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    {selectableTaxFields ? (
+                        <TextField
+                            key={selectableTaxFields.slug}
+                            select
+                            label={'Оберіть коефіцієнт'}
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            value={selectedValue} // Use the state as the value
+                            onChange={(e) => setSelectedValue(e.target.value)} // Handle change events
+                        >
+                            <MenuItem value="">
+                                Оберіть коефіцієнт
+                            </MenuItem>
+                            {selectableTaxFields.options.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    ) : null}
+                    {selectedTaxFields.map((field) => (
+                        <div key={field.id}>
+                            <TextField
+                                label={field.name}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                                required
+                                type="number"
+                                value={params[field.slug] || ''}
+                                onChange={(e) => setParams({ ...params, [field.slug]: e.target.value })} // Update params on change
+                                error={Boolean(errors[field.slug])}
+                                helperText={errors[field.slug]}
+                            />
+                        </div>
+                    ))}
                     <TextField
                         label="Об'єм викидів т/рік"
                         variant="outlined"
@@ -242,30 +328,6 @@ const EmissionTable = ({ emissions, corporations, substances }) => {
                         onChange={(e) => setData('volume_spent', e.target.value)}
                         error={Boolean(errors.volume_spent)}
                         helperText={errors.volume_spent}
-                    />
-                    <TextField
-                        label="Ставка податку(повітря) грн/т"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        required
-                        type="number"
-                        value={data.air_taxes}
-                        onChange={(e) => setData('air_taxes', e.target.value)}
-                        error={Boolean(errors.air_taxes)}
-                        helperText={errors.air_taxes}
-                    />
-                    <TextField
-                        label="Ставка податку(вода) грн/т"
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        required
-                        type="number"
-                        value={data.water_taxes}
-                        onChange={(e) => setData('water_taxes', e.target.value)}
-                        error={Boolean(errors.water_taxes)}
-                        helperText={errors.water_taxes}
                     />
                     <Button
                         type="submit"

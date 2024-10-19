@@ -2,19 +2,18 @@
 
 namespace App\Repository;
 
-use App\Models\Substance;
+use App\Models\TaxType;
 use Illuminate\Database\Eloquent\Collection;
 
-class SubstanceRepository extends AbstractRepository
+class TaxTypeRepository extends AbstractRepository
 {
-
     public function getAll(): Collection
     {
-        return Substance::query()->get();
+        return TaxType::query()->get();
     }
 
     protected function model(): string
     {
-        return Substance::class;
+        return TaxType::class;
     }
 }
