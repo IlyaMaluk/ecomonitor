@@ -24,7 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { router, useForm, usePage, Link } from '@inertiajs/react';
-const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
+const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrouped }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         corporation_id: '',
         substance_id: '',
@@ -37,7 +37,9 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
 
     const [params, setParams] = useState({});
 
-    console.log(params);
+    const handleRedirect = () => {
+        window.location.href = '/export';
+    };
 
 
     const [editData, setEditData] = useState({
@@ -395,20 +397,11 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
                                 <TableCell>Масова витрата г/год</TableCell>
                                 <TableCell>
                                     <TableSortLabel
-                                        active={orderColumn === 'air_taxes'}
+                                        active={orderColumn === 'tax_rate'}
                                         direction={orderDir}
-                                        onClick={() => handleSort('air_taxes')}
+                                        onClick={() => handleSort('tax_rate')}
                                     >
-                                        Ставка податку(повітря) грн/т
-                                    </TableSortLabel>
-                                </TableCell>
-                                <TableCell>
-                                    <TableSortLabel
-                                        active={orderColumn === 'water_taxes'}
-                                        direction={orderDir}
-                                        onClick={() => handleSort('water_taxes')}
-                                    >
-                                        Ставка податку(вода) грн/т
+                                        Сума податку грн/т
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell align="right">Дії</TableCell>
@@ -424,8 +417,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
                                         <TableCell>{emission.year}</TableCell>
                                         <TableCell>{emission.volume}</TableCell>
                                         <TableCell>{parseFloat(emission.volume_spent).toFixed(3)}</TableCell> {/* Округлення до 0.000 */}
-                                        <TableCell>{parseFloat(emission.air_taxes).toFixed(2)}</TableCell> {/* Округлення до 0.00 */}
-                                        <TableCell>{emission.water_taxes}</TableCell>
+                                        <TableCell>{parseFloat(emission.tax_rate).toFixed(2)}</TableCell> {/* Округлення до 0.00 */}
                                         <TableCell align="right">
                                             <IconButton
                                                 edge="end"
@@ -456,6 +448,14 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    onClick={handleRedirect}
+                    variant="outlined"
+                    fullWidth
+                    sx={{ mt: 2 }}
+                >
+                    Експорт звітності про суму податків по кожному підприємству
+                </Button>
             </Box>
 
             <Dialog open={isEditModalOpen} onClose={handleEditClose} fullWidth maxWidth="sm">

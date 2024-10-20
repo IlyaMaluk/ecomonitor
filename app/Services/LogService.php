@@ -6,19 +6,28 @@ use App\Http\Requests\CreateLogRequest;
 use App\Http\Requests\FilterLogRequest;
 use App\Models\Log;
 use App\Repository\LogRepository;
+use App\Services\TaxCalculation\TaxCalculationFactory;
 use Illuminate\Database\Eloquent\Collection;
 
 class LogService
 {
     public function __construct(
         private readonly LogRepository $repository,
-    )
-    {
+    ) {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function create(CreateLogRequest $request): Log
     {
-        return $this->repository->create($request->validated());
+        $data = $request->validated();
+        $log = $this->repository->create($data);
+        $calculator = TaxCalculationFactory::calculationMethod($data['tax_type_slug']);
+
+        return $this->repository->update($log, [
+            'tax_rate' => $calculator->calculate($log->volume, $data['params']),
+        ]);
     }
 
     public function getAll(): Collection
@@ -46,6 +55,11 @@ class LogService
                 ]
             )
             ->get();
+    }
+
+    public function getGroupedByTaxRate(): Collection
+    {
+        return $this->repository->getGroupedByTaxRate();
     }
 
     /**

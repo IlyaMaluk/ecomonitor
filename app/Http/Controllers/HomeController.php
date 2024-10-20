@@ -23,6 +23,7 @@ class HomeController extends Controller
     public function index(FilterLogRequest $request): Response
     {
         $logs = $this->logService->getFilteredWithRelations($request);
+        $logsGrouped = $this->logService->getGroupedByTaxRate();
         $corporations = $this->corporationService->getAll();
         $substances = $this->substanceService->getAll();
 
@@ -31,6 +32,7 @@ class HomeController extends Controller
             'corporations' => $corporations,
             'emissions' => $logs,
             'taxTypes' => $this->taxTypeService->getAll(),
+            'logsGrouped' => $logsGrouped,
         ]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CorporationController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SubstanceController;
@@ -41,3 +42,5 @@ Route::controller(LogController::class)->group(function() {
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home.index');
+
+Route::get('/export', [ExportController::class, 'export']);

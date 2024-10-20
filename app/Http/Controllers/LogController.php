@@ -15,8 +15,7 @@ class LogController extends Controller
 
     public function store(CreateLogRequest $request): RedirectResponse
     {
-        dd($request->validated());
-        dd($this->service->create($request));
+        $this->service->create($request);
 
         return redirect()->route('home.index');
     }
