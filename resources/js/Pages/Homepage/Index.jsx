@@ -28,17 +28,16 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         corporation_id: '',
         substance_id: '',
+        tax_type_id: '',
         year: '',
         volume: '',
         volume_spent: '',
-        air_taxes: '',
-        water_taxes: '',
+        tax_type_slug: '',
     });
 
-    console.log(data);
-
-    const [selectedValue, setSelectedValue] = useState('');
     const [params, setParams] = useState({});
+
+    console.log(params);
 
 
     const [editData, setEditData] = useState({
@@ -66,10 +65,10 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        post('/logs', {
-            preserveScroll: true,
-            onSuccess: () => reset(),
-        });
+        router.post('/logs', {
+            ...data,
+            params: params,
+        })
     };
 
     const handleDelete = (id) => {
@@ -140,9 +139,12 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
 
     const handleTaxTypeChange = (e) => {
         const selectedType = e.target.value;
-        setData({ ...data, tax_type: selectedType });
-
-        const taxType = taxTypes.find(tax => tax.name === selectedType);
+        const taxType = taxTypes.find(tax => tax.id === selectedType);
+        setData({
+            ...data,
+            tax_type_slug: taxType.name,
+            tax_type_id: taxType.id,
+        })
         if (taxType) {
             const fields = taxType.fields;
             setSelectedTaxFields(fields.input || []);
@@ -157,8 +159,6 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
             setSelectableTaxFields(null);
         }
     };
-
-    console.log(selectableTaxFields);
 
     return (
         <Container maxWidth="lg">
@@ -255,14 +255,14 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
                         margin="normal"
                         fullWidth
                         required
-                        value={data.tax_type}
+                        value={data.tax_type_id}
                         onChange={handleTaxTypeChange}
                     >
                         <MenuItem value="">
                             <em>Оберіть тип податку</em>
                         </MenuItem>
                         {taxTypes.map((tax) => (
-                            <MenuItem key={tax.name} value={tax.name}>
+                            <MenuItem key={tax.id} value={tax.id}>
                                 {tax.real_name}
                             </MenuItem>
                         ))}
@@ -276,8 +276,8 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes }) => {
                             margin="normal"
                             fullWidth
                             required
-                            value={selectedValue} // Use the state as the value
-                            onChange={(e) => setSelectedValue(e.target.value)} // Handle change events
+                            value={params[selectableTaxFields.slug] || ''}
+                            onChange={(e) => setParams({ ...params, [selectableTaxFields.slug]: e.target.value })} // Handle change events
                         >
                             <MenuItem value="">
                                 Оберіть коефіцієнт

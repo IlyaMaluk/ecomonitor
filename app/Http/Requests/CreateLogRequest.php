@@ -24,11 +24,12 @@ class CreateLogRequest extends FormRequest
         return [
             'corporation_id' => ['int', 'required'],
             'substance_id' => ['int', 'required'],
+            'tax_type_id' => ['int', 'required'],
             'year' => ['int', 'required'],
             'volume' => ['numeric', 'required'],
             'volume_spent' => ['numeric', 'required'],
-            'water_taxes' => ['numeric', 'required'],
-            'air_taxes' => ['numeric', 'required'],
+            'params' => ['array', 'required'],
+            'tax_type_slug' => ['string', 'required'],
         ];
     }
 }

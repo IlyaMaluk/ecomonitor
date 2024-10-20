@@ -17,8 +17,6 @@ class Log extends Model
         'year',
         'volume',
         'volume_spent',
-        'water_taxes',
-        'air_taxes',
     ];
 
     public function substance(): BelongsTo
