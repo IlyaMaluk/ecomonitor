@@ -45,8 +45,27 @@ abstract class AbstractRepository
             return false;
         }
 
+        $this->deleteRelatedRecords($model);
+
         return $model->delete();
     }
+
+    protected function deleteRelatedRecords(Model $model): void
+    {
+        $relations = $this->getRelations();
+
+        foreach ($relations as $relation) {
+            if (method_exists($model, $relation)) {
+                $relatedRecords = $model->$relation()->get();
+
+                foreach ($relatedRecords as $relatedRecord) {
+                    $relatedRecord->delete();
+                }
+            }
+        }
+    }
+
+    abstract protected function getRelations(): array;
 
     abstract protected function model(): string;
 }

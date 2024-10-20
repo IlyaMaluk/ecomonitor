@@ -16,4 +16,9 @@ class TaxTypeRepository extends AbstractRepository
     {
         return TaxType::class;
     }
+
+    protected function getRelations(): array
+    {
+        return [];
+    }
 }

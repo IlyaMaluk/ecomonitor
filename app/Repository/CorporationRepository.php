@@ -16,4 +16,11 @@ class CorporationRepository extends AbstractRepository
     {
         return Corporation::class;
     }
+
+    protected function getRelations(): array
+    {
+        return [
+            'logs',
+        ];
+    }
 }

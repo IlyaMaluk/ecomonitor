@@ -50,4 +50,9 @@ class LogRepository extends AbstractRepository
     {
         return Log::class;
     }
+
+    protected function getRelations(): array
+    {
+        return [];
+    }
 }

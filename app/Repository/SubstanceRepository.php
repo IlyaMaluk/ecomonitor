@@ -17,4 +17,11 @@ class SubstanceRepository extends AbstractRepository
     {
         return Substance::class;
     }
+
+    protected function getRelations(): array
+    {
+        return [
+            'logs',
+        ];
+    }
 }
