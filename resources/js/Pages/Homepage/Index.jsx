@@ -36,7 +36,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
     });
 
     const [params, setParams] = useState({});
-
+    console.log(emissions)
     const handleRedirect = () => {
         window.location.href = '/export';
     };
@@ -386,6 +386,9 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell>
+                                    Тип податку
+                                </TableCell>
+                                <TableCell>
                                     <TableSortLabel
                                         active={orderColumn === 'volume'}
                                         direction={orderDir}
@@ -415,6 +418,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
                                         <TableCell>{emission.corporation.title}</TableCell>
                                         <TableCell>{emission.substance.title}</TableCell>
                                         <TableCell>{emission.year}</TableCell>
+                                        <TableCell>{emission.tax_type.real_name}</TableCell>
                                         <TableCell>{emission.volume}</TableCell>
                                         <TableCell>{parseFloat(emission.volume_spent).toFixed(3)}</TableCell> {/* Округлення до 0.000 */}
                                         <TableCell>{parseFloat(emission.tax_rate).toFixed(2)}</TableCell> {/* Округлення до 0.00 */}

@@ -35,7 +35,7 @@ class LogRepository extends AbstractRepository
     public function getGroupedByTaxRate(): Collection
     {
         return Log::query()->selectRaw('SUM(tax_rate) as total_tax_rate, corporations.title')
-            ->join('ecomonitoring.corporations as corporations', 'logs.corporation_id', '=', 'corporations.id')
+            ->join('corporations as corporations', 'logs.corporation_id', '=', 'corporations.id')
             ->groupBy('corporations.title')
             ->get();
     }

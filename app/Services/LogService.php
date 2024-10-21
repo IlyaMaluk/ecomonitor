@@ -52,6 +52,7 @@ class LogService
                 [
                     'corporation',
                     'substance',
+                    'taxType',
                 ]
             )
             ->get();

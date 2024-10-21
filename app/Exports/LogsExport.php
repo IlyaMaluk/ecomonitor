@@ -13,7 +13,7 @@ class LogsExport implements FromQuery, WithHeadings
     public function query()
     {
         return Log::selectRaw('SUM(tax_rate) as total_tax_rate, corporations.title')
-            ->join('ecomonitoring.corporations as corporations', 'logs.corporation_id', '=', 'corporations.id')
+            ->join('corporations as corporations', 'logs.corporation_id', '=', 'corporations.id')
             ->groupBy('corporations.title');
     }
 
