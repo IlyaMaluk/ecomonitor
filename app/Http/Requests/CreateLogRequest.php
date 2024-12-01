@@ -30,6 +30,7 @@ class CreateLogRequest extends FormRequest
             'volume_spent' => ['numeric', 'required'],
             'params' => ['array', 'required'],
             'tax_type_slug' => ['string', 'required'],
+            'research_type' => ['string', 'required'],
         ];
     }
 }

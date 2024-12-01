@@ -22,6 +22,8 @@ const CreateSubstance = ({ substances }) => {
         title: '',
         class: '',
         tlv: '',
+        rfc: '',
+        c: '',
     });
 
     const submit = (e) => {
@@ -74,6 +76,30 @@ const CreateSubstance = ({ substances }) => {
                         error={Boolean(errors.tlv)}
                         helperText={errors.tlv}
                     />
+                    <TextField
+                        label="RFC"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        type="number"
+                        value={data.rfc}
+                        onChange={(e) => setData('rfc', e.target.value)}
+                        error={Boolean(errors.rfc)}
+                        helperText={errors.rfc}
+                    />
+                    <TextField
+                        label="C"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        type="number"
+                        value={data.c}
+                        onChange={(e) => setData('c', e.target.value)}
+                        error={Boolean(errors.c)}
+                        helperText={errors.c}
+                    />
                     <Button
                         type="submit"
                         variant="contained"
@@ -111,6 +137,8 @@ const CreateSubstance = ({ substances }) => {
                                 <TableCell>Назва</TableCell>
                                 <TableCell>Клас</TableCell>
                                 <TableCell>ГДК(мг/м^3)</TableCell>
+                                <TableCell>RFC</TableCell>
+                                <TableCell>C</TableCell>
                                 <TableCell align="right">Дії</TableCell>
                             </TableRow>
                         </TableHead>
@@ -122,6 +150,8 @@ const CreateSubstance = ({ substances }) => {
                                         <TableCell>{substance.title}</TableCell>
                                         <TableCell>{substance.class}</TableCell>
                                         <TableCell>{substance.tlv}</TableCell>
+                                        <TableCell>{substance.rfc}</TableCell>
+                                        <TableCell>{substance.c}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 edge="end"

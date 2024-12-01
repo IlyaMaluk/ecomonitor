@@ -24,7 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { router, useForm, usePage, Link } from '@inertiajs/react';
-const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrouped }) => {
+const EmissionTable = ({ emissions, corporations, substances, taxTypes, researchTypes }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         corporation_id: '',
         substance_id: '',
@@ -33,10 +33,10 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
         volume: '',
         volume_spent: '',
         tax_type_slug: '',
+        research_type: '',
     });
 
     const [params, setParams] = useState({});
-    console.log(emissions)
     const handleRedirect = () => {
         window.location.href = '/export';
     };
@@ -200,7 +200,25 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
                             <AddCircleIcon />
                         </IconButton>
                     </Box>
-
+                    <TextField
+                        select
+                        label="Тип дослідження"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        value={data.research_type}
+                        onChange={(e) => setData('research_type', e.target.value)}
+                    >
+                        <MenuItem value="">
+                            <em>Оберіть тип дослідження</em>
+                        </MenuItem>
+                        {Object.entries(researchTypes).map(([key, value]) => (
+                            <MenuItem key={key} value={value}>
+                                {value}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <TextField
                             select
@@ -389,6 +407,12 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
                                     Тип податку
                                 </TableCell>
                                 <TableCell>
+                                    Тип дослідження
+                                </TableCell>
+                                <TableCell>
+                                    Рівень ризику
+                                </TableCell>
+                                <TableCell>
                                     <TableSortLabel
                                         active={orderColumn === 'volume'}
                                         direction={orderDir}
@@ -419,6 +443,8 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, logsGrou
                                         <TableCell>{emission.substance.title}</TableCell>
                                         <TableCell>{emission.year}</TableCell>
                                         <TableCell>{emission.tax_type.real_name}</TableCell>
+                                        <TableCell>{emission.research_type}</TableCell>
+                                        <TableCell>{emission.risk_level}</TableCell>
                                         <TableCell>{emission.volume}</TableCell>
                                         <TableCell>{parseFloat(emission.volume_spent).toFixed(3)}</TableCell> {/* Округлення до 0.000 */}
                                         <TableCell>{parseFloat(emission.tax_rate).toFixed(2)}</TableCell> {/* Округлення до 0.00 */}

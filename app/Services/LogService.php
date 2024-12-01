@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\Log\ResearchType;
 use App\Http\Requests\CreateLogRequest;
 use App\Http\Requests\FilterLogRequest;
 use App\Models\Log;
@@ -13,6 +14,7 @@ class LogService
 {
     public function __construct(
         private readonly LogRepository $repository,
+        private readonly RiskTypeCalculationService $riskTypeCalculationService,
     ) {
     }
 
@@ -27,6 +29,7 @@ class LogService
 
         return $this->repository->update($log, [
             'tax_rate' => $calculator->calculate($log->volume, $data['params']),
+            'risk_level' => $this->riskTypeCalculationService->calculateRisk($log, ResearchType::tryFrom($data['research_type'])),
         ]);
     }
 

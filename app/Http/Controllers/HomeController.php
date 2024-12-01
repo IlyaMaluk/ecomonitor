@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Log\ResearchType;
 use App\Http\Requests\FilterLogRequest;
 use App\Services\CorporationService;
 use App\Services\LogService;
@@ -33,6 +34,7 @@ class HomeController extends Controller
             'emissions' => $logs,
             'taxTypes' => $this->taxTypeService->getAll(),
             'logsGrouped' => $logsGrouped,
+            'researchTypes' => ResearchType::getLists(),
         ]);
     }
 }

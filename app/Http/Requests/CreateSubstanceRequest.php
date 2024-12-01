@@ -25,6 +25,8 @@ class CreateSubstanceRequest extends FormRequest
             'title' => ['string', 'required'],
             'class' => ['string', 'required'],
             'tlv' => ['numeric', 'required'],
+            'rfc' => ['numeric', 'required'],
+            'c' => ['numeric', 'required'],
         ];
     }
 }
