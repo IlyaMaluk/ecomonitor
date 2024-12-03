@@ -166,7 +166,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, research
         <Container maxWidth="lg">
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Додати новий запис викидів
+                    Оцінити ризик
                 </Typography>
                 <form onSubmit={submit} noValidate>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -321,7 +321,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, research
 
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
-                    Таблиця викидів
+                    Таблиця досліджень
                 </Typography>
                 <TableContainer component={Paper}>
                     <Table>
