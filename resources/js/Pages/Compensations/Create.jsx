@@ -246,31 +246,48 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                         helperText={errors.middle_year_concentration}
                     />
 
+                    {/** Заменяем TextField для coefficient_villagers_count на select */}
                     <TextField
-                        label="Коефіцієнт кількості мешканців (coefficient_villagers_count)"
+                        select
+                        label="Коефіцієнт кількості мешканців"
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         required
-                        type="number"
                         value={data.coefficient_villagers_count}
                         onChange={(e) => setData('coefficient_villagers_count', e.target.value)}
                         error={Boolean(errors.coefficient_villagers_count)}
                         helperText={errors.coefficient_villagers_count}
-                    />
+                    >
+                        <MenuItem value="">
+                            <em>Оберіть діапазон</em>
+                        </MenuItem>
+                        <MenuItem value="1">до 100 (коеф 1)</MenuItem>
+                        <MenuItem value="1.20">100.1 - 250 (коеф 1.20)</MenuItem>
+                        <MenuItem value="1.35">250.1 - 500 (коеф 1.35)</MenuItem>
+                        <MenuItem value="1.55">500.1 - 1000 (коеф 1.55)</MenuItem>
+                        <MenuItem value="1.80">більше 1000 (коеф 1.80)</MenuItem>
+                    </TextField>
 
                     <TextField
-                        label="Коеф. для національної економіки (coefficient_national_economy)"
+                        select
+                        label="Тип населеного пункту"
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         required
-                        type="number"
                         value={data.coefficient_national_economy}
                         onChange={(e) => setData('coefficient_national_economy', e.target.value)}
                         error={Boolean(errors.coefficient_national_economy)}
                         helperText={errors.coefficient_national_economy}
-                    />
+                    >
+                        <MenuItem value="">
+                            <em>Оберіть діапазон</em>
+                        </MenuItem>
+                        <MenuItem value="1">Організаційно-господарські та культурно-побутові центри місцевого значення (коеф 1)</MenuItem>
+                        <MenuItem value="1.25">Багатофункціональні центри, центри з перевагою промислових і транспортних функцій (коеф 1.25)</MenuItem>
+                        <MenuItem value="1.65">населені пункти, природні території яких оголошено курортними територіями (коеф 1.65)</MenuItem>
+                    </TextField>
 
                     <Button
                         type="submit"
@@ -497,20 +514,30 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                             helperText={errors.middle_year_concentration}
                         />
 
+                        {/** Аналогично меняем и в модальном окне редактирования */}
                         <TextField
-                            label="Коеф. мешканців"
+                            select
+                            label="Коефіцієнт кількості мешканців"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
-                            type="number"
                             value={editData.coefficient_villagers_count || ''}
                             onChange={(e) =>
                                 setEditData({ ...editData, coefficient_villagers_count: e.target.value })
                             }
                             error={Boolean(errors.coefficient_villagers_count)}
                             helperText={errors.coefficient_villagers_count}
-                        />
+                        >
+                            <MenuItem value="">
+                                <em>Оберіть діапазон</em>
+                            </MenuItem>
+                            <MenuItem value="1">до 100 (коеф 1)</MenuItem>
+                            <MenuItem value="1.20">100.1 - 250 (коеф 1.20)</MenuItem>
+                            <MenuItem value="1.35">250.1 - 500 (коеф 1.35)</MenuItem>
+                            <MenuItem value="1.55">500.1 - 1000 (коеф 1.55)</MenuItem>
+                            <MenuItem value="1.80">більше 1000 (коеф 1.80)</MenuItem>
+                        </TextField>
 
                         <TextField
                             label="Коеф. нац. економіки"

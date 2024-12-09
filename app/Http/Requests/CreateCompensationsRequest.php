@@ -29,7 +29,7 @@ class CreateCompensationsRequest extends FormRequest
             'salary' => ['numeric', 'required'],
             'middle_concentration' => ['numeric', 'required'],
             'middle_year_concentration' => ['numeric', 'required'],
-            'coefficient_villagers_count' => ['int', 'required'],
+            'coefficient_villagers_count' => ['numeric', 'required'],
             'coefficient_national_economy' => ['numeric', 'required'],
         ];
     }
