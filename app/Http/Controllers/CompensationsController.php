@@ -26,6 +26,7 @@ class CompensationsController extends Controller
         $corporations = $this->corporationService->getAll();
         $substances = $this->substanceService->getAll();
         $compensations = $this->service->getAll();
+
         return Inertia::render('Compensations/Create', [
             'compensations' => $compensations,
             'substances' => $substances,

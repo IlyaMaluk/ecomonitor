@@ -24,16 +24,6 @@ class CompensationsService
             ]);
     }
 
-    private function calculateCompensation(array $data): float
-    {
-        return $data['volume']
-            * $data['salary']
-            * $data['middle_concentration']
-            * $data['middle_year_concentration']
-            * $data['coefficient_villagers_count']
-            * $data['coefficient_national_economy'];
-    }
-
     public function getAll(): Collection
     {
         return $this->repository->getAll();
@@ -42,5 +32,15 @@ class CompensationsService
     public function delete(int $id): bool
     {
         return $this->repository->delete($id);
+    }
+
+    private function calculateCompensation(array $data): float
+    {
+        return $data['volume']
+            * $data['salary']
+            * $data['middle_concentration']
+            * $data['middle_year_concentration']
+            * $data['coefficient_villagers_count']
+            * $data['coefficient_national_economy'];
     }
 }

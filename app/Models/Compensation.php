@@ -35,6 +35,7 @@ class Compensation extends Model
     {
         return $this->belongsTo(Corporation::class);
     }
+
     public function substance(): BelongsTo
     {
         return $this->belongsTo(Substance::class);

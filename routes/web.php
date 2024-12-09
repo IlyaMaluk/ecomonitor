@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompensationsController;
 use App\Http\Controllers\CorporationController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HomeController;
@@ -39,7 +40,8 @@ Route::controller(LogController::class)->group(function() {
     Route::delete('/logs/{id}', 'destroy')
         ->name('logs.destroy');
 });
-Route::controller(\App\Http\Controllers\CompensationsController::class)->group(function() {
+
+Route::controller(CompensationsController::class)->group(function() {
     Route::get('/compensations', 'create')
         ->name('compensations.create');
     Route::post('/compensations/', 'store')
