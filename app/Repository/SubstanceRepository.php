@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class SubstanceRepository extends AbstractRepository
 {
-
     public function getAll(): Collection
     {
         return Substance::query()->get();

@@ -39,6 +39,14 @@ Route::controller(LogController::class)->group(function() {
     Route::delete('/logs/{id}', 'destroy')
         ->name('logs.destroy');
 });
+Route::controller(\App\Http\Controllers\CompensationsController::class)->group(function() {
+    Route::get('/compensations', 'create')
+        ->name('compensations.create');
+    Route::post('/compensations/', 'store')
+        ->name('compensations.store');
+    Route::delete('/compensations/{id}', 'destroy')
+        ->name('compensations.destroy');
+});
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home.index');

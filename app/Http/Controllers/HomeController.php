@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\Log\ResearchType;
 use App\Http\Requests\FilterLogRequest;
+use App\Services\CompensationsService;
 use App\Services\CorporationService;
 use App\Services\LogService;
 use App\Services\SubstanceService;
