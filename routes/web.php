@@ -6,6 +6,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SubstanceController;
+use App\Http\Controllers\WaterCompensationController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(CorporationController::class)->group(function() {
@@ -49,6 +50,15 @@ Route::controller(CompensationsController::class)->group(function() {
     Route::delete('/compensations/{id}', 'destroy')
         ->name('compensations.destroy');
 });
+
+Route::controller(WaterCompensationController::class)->group(function() {
+    Route::get('/watercompensations', 'create')
+        ->name('watercompensations.create');
+    Route::post('/watercompensations/', 'store')
+        ->name('watercompensations.store');
+    Route::delete('/watercompensations/{id}', 'destroy')
+        ->name('watercompensations.destroy');
+}) ;
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home.index');
