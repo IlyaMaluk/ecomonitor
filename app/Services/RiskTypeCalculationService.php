@@ -21,7 +21,6 @@ class RiskTypeCalculationService
     private function calculateNonCarcinogenic(Log $log): RiskLevel
     {
         $hq = $log->substance->c / $log->substance->rfc;
-
         if ($hq > 3) {
             return RiskLevel::HIGH;
         } elseif ($hq >= 1.1) {

@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CompensationsController;
 use App\Http\Controllers\CorporationController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SubstanceController;
+use App\Http\Controllers\WaterCompensationController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(CorporationController::class)->group(function() {
@@ -39,6 +41,24 @@ Route::controller(LogController::class)->group(function() {
     Route::delete('/logs/{id}', 'destroy')
         ->name('logs.destroy');
 });
+
+Route::controller(CompensationsController::class)->group(function() {
+    Route::get('/compensations', 'create')
+        ->name('compensations.create');
+    Route::post('/compensations/', 'store')
+        ->name('compensations.store');
+    Route::delete('/compensations/{id}', 'destroy')
+        ->name('compensations.destroy');
+});
+
+Route::controller(WaterCompensationController::class)->group(function() {
+    Route::get('/watercompensations', 'create')
+        ->name('watercompensations.create');
+    Route::post('/watercompensations/', 'store')
+        ->name('watercompensations.store');
+    Route::delete('/watercompensations/{id}', 'destroy')
+        ->name('watercompensations.destroy');
+}) ;
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home.index');
