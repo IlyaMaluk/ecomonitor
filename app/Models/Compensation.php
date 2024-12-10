@@ -26,10 +26,7 @@ class Compensation extends Model
 
     protected $table = 'compensations';
 
-    public function logs(): HasMany
-    {
-        return $this->hasMany(Log::class);
-    }
+
 
     public function corporation(): BelongsTo
     {
