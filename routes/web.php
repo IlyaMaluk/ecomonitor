@@ -54,7 +54,7 @@ Route::controller(CompensationsController::class)->group(function() {
 Route::controller(WaterCompensationController::class)->group(function() {
     Route::get('/watercompensations', 'create')
         ->name('watercompensations.create');
-    Route::post('/watercompensations/', 'store')
+    Route::post('/watercompensations', 'store')
         ->name('watercompensations.store');
     Route::delete('/watercompensations/{id}', 'destroy')
         ->name('watercompensations.destroy');

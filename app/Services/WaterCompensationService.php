@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Http\Requests\CreateWaterCompensationRequest;
+use App\Models\Substance;
 use App\Models\WaterCompensation;
+use App\Repository\SubstanceRepository;
 use App\Repository\WaterCompensationRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +14,7 @@ class WaterCompensationService
 {
     public function __construct(
         private readonly WaterCompensationRepository $repository,
+        private readonly SubstanceRepository         $substanceRepository,
     )
     {
     }
@@ -20,7 +23,11 @@ class WaterCompensationService
     {
         $data = $request->validated();
         $waterCompensation = $this->repository->create($data);
-        $this -> updateCalculatedCompensation($waterCompensation);
+
+        $this->repository->update($waterCompensation, [
+            'calculated_water_compensation' => $this->calculateCompensation($data),
+        ]);
+
         return $waterCompensation;
     }
 
@@ -34,29 +41,43 @@ class WaterCompensationService
         return $this->repository->delete($id);
     }
 
-    private function sumSubstances(array $data, float $tlv)
+    private function sumSubstances(array $data): float
     {
-           $count = $data['substance_count'];
-           $calculatedSum = 0;
-           for ($i = 1; $i <= $count; $i++)
-           {
-               $calculatedSum = $calculatedSum + ($data['indexated_loss'] * (1/$tlv));
-           }
-           return $calculatedSum;
+        $substancesCollection = collect($data['substances']);
+
+        /** @var Collection<Substance> $substances */
+        $substances = $this->substanceRepository
+            ->query()
+            ->whereIn(
+                'id',
+                $substancesCollection
+                    ->pluck('substance_id')
+                    ->toArray()
+            )->get();
+        $sum = 0;
+
+        foreach ($substancesCollection as $key => $substance) {
+            $sum += $substance['polution_mass'] * $this->calculateEconomicLoss($data, $substances[$key]);
+        }
+
+        return $sum;
     }
 
-    private function calculateCompensation(array $data, float $tlv): float
+    private function calculateCompensation(array $data): float
     {
         return $data['category_coefficient']
             * $data['regional_coefficient']
-            * $data['polution_mass']
-            * $this->sumSubstances($data, $tlv);
+            * 1.5
+            * $this->sumSubstances($data);
     }
 
-    private function updateCalculatedCompensation(WaterCompensation $waterCompensation): void
+    private function calculateEconomicLoss(array $data, Substance $substance): float
     {
-        $substance = $waterCompensation->substance;
-        $calculatedCompensation = $this->calculateCompensation($waterCompensation->toArray(), $substance->tlv);
-        $this->repository->update($waterCompensation, ['calculated_compensation' => $calculatedCompensation]);
+        return $this->calculateOwnEconomicLoss($data) / $substance->tlv;
+    }
+
+    private function calculateOwnEconomicLoss(array $data): float
+    {
+        return $data['indexated_loss'] * config('losses')["{$data['year']}"] / 100;
     }
 }

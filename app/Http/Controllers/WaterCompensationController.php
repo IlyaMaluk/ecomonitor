@@ -29,7 +29,7 @@ class WaterCompensationController extends Controller
         $compensations = $this->service->getAll();
 
         return Inertia::render('WaterCompensations/Create', [
-            'waterCompensations' => $compensations,
+            'watercompensations' => $compensations,
             'substances' => $substances,
             'corporations' => $corporations
         ]);

@@ -262,7 +262,7 @@ const EmissionTable = ({ emissions, corporations, substances, taxTypes, research
                         error={Boolean(errors.year)}
                         helperText={errors.year}
                     >
-                        {Array.from({ length: 2024 - 1915 + 1 }, (_, i) => 2024 - i).map((year) => (
+                        {Array.from({ length: 2024 - 2019 + 1 }, (_, i) => 2024 - i).map((year) => (
                             <MenuItem key={year} value={year}>
                                 {year}
                             </MenuItem>

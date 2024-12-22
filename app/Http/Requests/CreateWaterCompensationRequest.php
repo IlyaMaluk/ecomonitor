@@ -23,13 +23,11 @@ class CreateWaterCompensationRequest extends FormRequest
     {
         return [
             'corporation_id' => ['int', 'required'],
-            'substance_id' => ['int', 'required'],
             'year' => ['int', 'required'],
             'category_coefficient' => ['numeric', 'required'],
             'regional_coefficient' => ['numeric', 'required'],
-            'polution_mass' => ['numeric', 'required'],
             'indexated_loss' => ['numeric', 'required'],
-            'substance_count' => ['int', 'required'],
+            'substances' => ['array', 'required'],
         ];
     }
 }
