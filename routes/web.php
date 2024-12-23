@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\CompensationsController;
 use App\Http\Controllers\CorporationController;
+use App\Http\Controllers\DamageAmountController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SubstanceController;
+use App\Http\Controllers\SubstancePolutionController;
 use App\Http\Controllers\WaterCompensationController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,3 +66,17 @@ Route::get('/', [HomeController::class, 'index'])
     ->name('home.index');
 
 Route::get('/export', [ExportController::class, 'export']);
+
+Route::controller(SubstancePolutionController::class)->group(function() {
+    Route::get('/substance-polution', 'index')
+        ->name('substance-polution.index');
+    Route::post('/substance-polution', 'calculatePolution')
+        ->name('substance-polution.create');
+});
+
+Route::controller(DamageAmountController::class)->group(function() {
+    Route::get('/damage-amount', 'index')
+        ->name('damage-amount.index');
+    Route::post('/damage-amount', 'store')
+        ->name('damage-amount.store');
+});
