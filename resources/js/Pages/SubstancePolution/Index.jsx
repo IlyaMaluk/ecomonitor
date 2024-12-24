@@ -27,6 +27,8 @@ const Index = ({ substances, substancePolutions }) => {
         po: '',
         S: '',
         tax_rate: '',
+
+        // Окремі поля, які будуть вибиратися з випадаючих списків
         hazard_class_coeff: '',
         environmental_impact_coeff: '',
         event_scale_coeff: '',
@@ -41,9 +43,8 @@ const Index = ({ substances, substancePolutions }) => {
     };
 
     const handleFormulaChange = (e) => {
-        const value = e.target.value;
-        setFormulaType(value);
-        setData('formula_type', value);
+        setFormulaType(e.target.value);
+        setData('formula_type', e.target.value);
     };
 
     return (
@@ -84,29 +85,31 @@ const Index = ({ substances, substancePolutions }) => {
                             <AddCircleIcon />
                         </IconButton>
                     </Box>
-                    <Box sx={{ mt: 2 }}>
-                        <TextField
-                            select
-                            label="Формула"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            value={formulaType}
-                            onChange={handleFormulaChange}
-                        >
-                            <MenuItem value="">
-                                <em>Оберіть формулу</em>
-                            </MenuItem>
-                            <MenuItem value="formula1">Якщо відома маса</MenuItem>
-                            <MenuItem value="formula2">Не відома маса</MenuItem>
-                            <MenuItem value="formula3">Лісові насадження</MenuItem>
-                        </TextField>
-                    </Box>
+
+                    {/* Приклад вибору формули (не стосується випадаючих списків коефіцієнтів) */}
+                    <TextField
+                        select
+                        label="Формула"
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        required
+                        value={formulaType}
+                        onChange={handleFormulaChange}
+                    >
+                        <MenuItem value="">
+                            <em>Оберіть формулу</em>
+                        </MenuItem>
+                        <MenuItem value="formula1">Відома маса</MenuItem>
+                        <MenuItem value="formula2">Не відома маса</MenuItem>
+                        <MenuItem value="formula3">Лісові насадження</MenuItem>
+                    </TextField>
+
+                    {/* Якщо формула = formula1 */}
                     {formulaType === 'formula1' && (
                         <Box sx={{ mt: 2 }}>
                             <TextField
-                                label="qi"
+                                label="qi (т/т)"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
@@ -115,7 +118,7 @@ const Index = ({ substances, substancePolutions }) => {
                                 onChange={(e) => setData('qi', e.target.value)}
                             />
                             <TextField
-                                label="Mci"
+                                label="Mаса згорілої речовини (т)"
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
@@ -125,6 +128,8 @@ const Index = ({ substances, substancePolutions }) => {
                             />
                         </Box>
                     )}
+
+                    {/* Якщо формула = formula2 */}
                     {formulaType === 'formula2' && (
                         <Box sx={{ mt: 2 }}>
                             <TextField
@@ -156,6 +161,8 @@ const Index = ({ substances, substancePolutions }) => {
                             />
                         </Box>
                     )}
+
+                    {/* Якщо формула = formula3 */}
                     {formulaType === 'formula3' && (
                         <Box sx={{ mt: 2 }}>
                             <TextField
@@ -178,9 +185,10 @@ const Index = ({ substances, substancePolutions }) => {
                             />
                         </Box>
                     )}
+
                     <Box sx={{ mt: 2 }}>
                         <TextField
-                            label="Ставка податку"
+                            label="Ставка податку (грн)"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -188,43 +196,98 @@ const Index = ({ substances, substancePolutions }) => {
                             value={data.tax_rate}
                             onChange={(e) => setData('tax_rate', e.target.value)}
                         />
+
+                        {/* 1) Окремий випадаючий список для Коефіцієнта класу небезпеки */}
                         <TextField
-                            label="Коефіцієнт класу небезпеки"
+                            select
+                            label="Коефіцієнт класу небезпеки (Kнеб)"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
                             value={data.hazard_class_coeff}
                             onChange={(e) => setData('hazard_class_coeff', e.target.value)}
-                        />
+                            error={Boolean(errors.hazard_class_coeff)}
+                            helperText={errors.hazard_class_coeff}
+                        >
+                            <MenuItem value="">
+                                <em>Оберіть коефіцієнт</em>
+                            </MenuItem>
+                            <MenuItem value="2">Class II (коеф 2)</MenuItem>
+                            <MenuItem value="3">Class III (коеф 3)</MenuItem>
+                            <MenuItem value="5">Class V (коеф 5)</MenuItem>
+                        </TextField>
+
+                        {/* 2) Окремий випадаючий список для Коефіцієнта впливу на довкілля (Kв) */}
                         <TextField
-                            label="Коефіцієнт впливу на довкілля"
+                            select
+                            label="Коефіцієнт впливу (Kв)"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
                             value={data.environmental_impact_coeff}
-                            onChange={(e) => setData('environmental_impact_coeff', e.target.value)}
-                        />
+                            onChange={(e) =>
+                                setData('environmental_impact_coeff', e.target.value)
+                            }
+                            error={Boolean(errors.environmental_impact_coeff)}
+                            helperText={errors.environmental_impact_coeff}
+                        >
+                            <MenuItem value="">
+                                <em>Оберіть коефіцієнт</em>
+                            </MenuItem>
+                            <MenuItem value="3">До 12 год (коеф 3)</MenuItem>
+                            <MenuItem value="4">До 24 год (коеф 4)</MenuItem>
+                            <MenuItem value="5">Понад 24 год (коеф 5)</MenuItem>
+                        </TextField>
+
+                        {/* 3) Окремий випадаючий список для Коефіцієнта масштабу події (Kмп) */}
                         <TextField
-                            label="Коефіцієнт масштабу події"
+                            select
+                            label="Коефіцієнт масштабу події (Kмп)"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
                             value={data.event_scale_coeff}
                             onChange={(e) => setData('event_scale_coeff', e.target.value)}
-                        />
+                            error={Boolean(errors.event_scale_coeff)}
+                            helperText={errors.event_scale_coeff}
+                        >
+                            <MenuItem value="">
+                                <em>Оберіть коефіцієнт</em>
+                            </MenuItem>
+                            <MenuItem value="1.2">До 50т (коеф 1.2)</MenuItem>
+                            <MenuItem value="2">50–150т (коеф 2)</MenuItem>
+                            <MenuItem value="3">150–500т (коеф 3)</MenuItem>
+                        </TextField>
+
+                        {/* 4) Окремий випадаючий список для Коефіцієнта характеру походження (Kпп) */}
                         <TextField
-                            label="Коефіцієнт характериу походження події"
+                            select
+                            label="Коефіцієнт характеру походження події (Kпп)"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
                             value={data.origin_character_coeff}
-                            onChange={(e) => setData('origin_character_coeff', e.target.value)}
-                        />
+                            onChange={(e) =>
+                                setData('origin_character_coeff', e.target.value)
+                            }
+                            error={Boolean(errors.origin_character_coeff)}
+                            helperText={errors.origin_character_coeff}
+                        >
+                            <MenuItem value="">
+                                <em>Оберіть коефіцієнт</em>
+                            </MenuItem>
+                            <MenuItem value="3">Надзвичайна ситуація (коеф 3)</MenuItem>
+                            <MenuItem value="6">
+                                НС з неможливістю проживання (коеф 6)
+                            </MenuItem>
+                            <MenuItem value="10">Воєнний стан (коеф 10)</MenuItem>
+                        </TextField>
                     </Box>
+
                     <Box sx={{ mt: 3 }}>
                         <Button type="submit" variant="contained" color="primary" disabled={processing}>
                             Зберегти
@@ -232,6 +295,7 @@ const Index = ({ substances, substancePolutions }) => {
                     </Box>
                 </form>
             </Box>
+
             <Box sx={{ mt: 4 }}>
                 <Typography variant="h5" component="h2" gutterBottom>
                     Таблиця забруднень
@@ -241,7 +305,7 @@ const Index = ({ substances, substancePolutions }) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Substance</TableCell>
-                                <TableCell>Polution</TableCell>
+                                <TableCell>Polution (грн)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

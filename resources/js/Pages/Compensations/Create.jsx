@@ -23,7 +23,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useForm, usePage, Link } from '@inertiajs/react';
+import { useForm, Link } from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia';
 
 const CompensationsCreate = ({ compensations, corporations, substances }) => {
@@ -53,13 +53,11 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
     });
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
     const [orderColumn, setOrderColumn] = useState('');
     const [orderDir, setOrderDir] = useState('asc');
 
     const submit = (e) => {
         e.preventDefault();
-        // Отправка данных на бекенд для создания записи
         post('/compensations', {
             onSuccess: () => reset(),
         });
@@ -101,7 +99,6 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
         const direction = isDesc ? 'asc' : 'desc';
         setOrderColumn(column);
         setOrderDir(direction);
-        // При необходимости можно сделать запрос с сортировкой
     };
 
     return (
@@ -195,7 +192,7 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                     </TextField>
 
                     <TextField
-                        label="Обсяг (volume)"
+                        label="Обсяг (т)"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -208,7 +205,7 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                     />
 
                     <TextField
-                        label="Зарплата (salary)"
+                        label="Зарплата (грн)"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -221,7 +218,7 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                     />
 
                     <TextField
-                        label="Середня концентрація (middle_concentration)"
+                        label="Середня добова концентрація (мг/м³)"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -234,7 +231,7 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                     />
 
                     <TextField
-                        label="Середньорічна концентрація (middle_year_concentration)"
+                        label="Середньорічна концентрація (мг/м³)"
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -246,7 +243,6 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                         helperText={errors.middle_year_concentration}
                     />
 
-                    {/** Заменяем TextField для coefficient_villagers_count на select */}
                     <TextField
                         select
                         label="Коефіцієнт кількості мешканців"
@@ -284,9 +280,9 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                         <MenuItem value="">
                             <em>Оберіть діапазон</em>
                         </MenuItem>
-                        <MenuItem value="1">Організаційно-господарські та культурно-побутові центри місцевого значення (коеф 1)</MenuItem>
-                        <MenuItem value="1.25">Багатофункціональні центри, центри з перевагою промислових і транспортних функцій (коеф 1.25)</MenuItem>
-                        <MenuItem value="1.65">населені пункти, природні території яких оголошено курортними територіями (коеф 1.65)</MenuItem>
+                        <MenuItem value="1">Організаційно-господарські (коеф 1)</MenuItem>
+                        <MenuItem value="1.25">Багатофункціональні (коеф 1.25)</MenuItem>
+                        <MenuItem value="1.65">Курортні території (коеф 1.65)</MenuItem>
                     </TextField>
 
                     <Button
@@ -322,13 +318,13 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                                         Рік
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell>Обсяг</TableCell>
-                                <TableCell>Зарплата</TableCell>
-                                <TableCell>Сер. конц.</TableCell>
-                                <TableCell>Сер. річна конц.</TableCell>
+                                <TableCell>Обсяг (т)</TableCell>
+                                <TableCell>Зарплата (грн)</TableCell>
+                                <TableCell>Сер. доб. конц. (мг/м&#179;)</TableCell>
+                                <TableCell>Сер. річна конц. (мг/м&#179;)</TableCell>
                                 <TableCell>Коеф. мешканців</TableCell>
                                 <TableCell>Коеф. нац. економіки</TableCell>
-                                <TableCell>Розрахована компенсація</TableCell>
+                                <TableCell>Розрахована компенсація (грн)</TableCell>
                                 <TableCell align="right">Дії</TableCell>
                             </TableRow>
                         </TableHead>
@@ -346,7 +342,11 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                                         <TableCell>{item.middle_year_concentration}</TableCell>
                                         <TableCell>{item.coefficient_villagers_count}</TableCell>
                                         <TableCell>{item.coefficient_national_economy}</TableCell>
-                                        <TableCell>{item.calculated_compensation}</TableCell>
+                                        <TableCell>
+                                            {item.calculated_compensation
+                                                ? parseFloat(item.calculated_compensation).toFixed(2)
+                                                : '-'}
+                                        </TableCell>
                                         <TableCell align="right">
                                             <IconButton
                                                 edge="end"
@@ -378,190 +378,6 @@ const CompensationsCreate = ({ compensations, corporations, substances }) => {
                     </Table>
                 </TableContainer>
             </Box>
-
-            <Dialog open={isEditModalOpen} onClose={handleEditClose} fullWidth maxWidth="sm">
-                <DialogTitle>Редагувати компенсацію</DialogTitle>
-                <DialogContent>
-                    <form id="edit-form" onSubmit={handleEditSubmit} noValidate>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <TextField
-                                select
-                                label="Підприємство"
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                required
-                                value={editData.corporation_id || ''}
-                                onChange={(e) =>
-                                    setEditData({ ...editData, corporation_id: e.target.value ? parseInt(e.target.value, 10) : '' })
-                                }
-                                error={Boolean(errors.corporation_id)}
-                                helperText={errors.corporation_id}
-                            >
-                                {corporations && corporations.map((corp) => (
-                                    <MenuItem key={corp.id} value={corp.id}>
-                                        {corp.title}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <IconButton
-                                color="primary"
-                                component={Link}
-                                href="/corporations"
-                                sx={{ ml: 2 }}
-                            >
-                                <AddCircleIcon />
-                            </IconButton>
-                        </Box>
-
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <TextField
-                                select
-                                label="Забруднююча речовина"
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                required
-                                value={editData.substance_id || ''}
-                                onChange={(e) =>
-                                    setEditData({ ...editData, substance_id: e.target.value ? parseInt(e.target.value, 10) : '' })
-                                }
-                                error={Boolean(errors.substance_id)}
-                                helperText={errors.substance_id}
-                            >
-                                {substances && substances.map((sub) => (
-                                    <MenuItem key={sub.id} value={sub.id}>
-                                        {sub.title}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <IconButton
-                                color="primary"
-                                component={Link}
-                                href="/substances"
-                                sx={{ ml: 2 }}
-                            >
-                                <AddCircleIcon />
-                            </IconButton>
-                        </Box>
-
-                        <TextField
-                            label="Рік"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.year || ''}
-                            onChange={(e) => setEditData({ ...editData, year: e.target.value })}
-                            error={Boolean(errors.year)}
-                            helperText={errors.year}
-                        />
-
-                        <TextField
-                            label="Обсяг"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.volume || ''}
-                            onChange={(e) => setEditData({ ...editData, volume: e.target.value })}
-                            error={Boolean(errors.volume)}
-                            helperText={errors.volume}
-                        />
-
-                        <TextField
-                            label="Зарплата"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.salary || ''}
-                            onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
-                            error={Boolean(errors.salary)}
-                            helperText={errors.salary}
-                        />
-
-                        <TextField
-                            label="Сер. конц."
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.middle_concentration || ''}
-                            onChange={(e) =>
-                                setEditData({ ...editData, middle_concentration: e.target.value })
-                            }
-                            error={Boolean(errors.middle_concentration)}
-                            helperText={errors.middle_concentration}
-                        />
-
-                        <TextField
-                            label="Сер. річна конц."
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.middle_year_concentration || ''}
-                            onChange={(e) =>
-                                setEditData({ ...editData, middle_year_concentration: e.target.value })
-                            }
-                            error={Boolean(errors.middle_year_concentration)}
-                            helperText={errors.middle_year_concentration}
-                        />
-
-                        {/** Аналогично меняем и в модальном окне редактирования */}
-                        <TextField
-                            select
-                            label="Коефіцієнт кількості мешканців"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            value={editData.coefficient_villagers_count || ''}
-                            onChange={(e) =>
-                                setEditData({ ...editData, coefficient_villagers_count: e.target.value })
-                            }
-                            error={Boolean(errors.coefficient_villagers_count)}
-                            helperText={errors.coefficient_villagers_count}
-                        >
-                            <MenuItem value="">
-                                <em>Оберіть діапазон</em>
-                            </MenuItem>
-                            <MenuItem value="1">до 100 (коеф 1)</MenuItem>
-                            <MenuItem value="1.20">100.1 - 250 (коеф 1.20)</MenuItem>
-                            <MenuItem value="1.35">250.1 - 500 (коеф 1.35)</MenuItem>
-                            <MenuItem value="1.55">500.1 - 1000 (коеф 1.55)</MenuItem>
-                            <MenuItem value="1.80">більше 1000 (коеф 1.80)</MenuItem>
-                        </TextField>
-
-                        <TextField
-                            label="Коеф. нац. економіки"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            type="number"
-                            value={editData.coefficient_national_economy || ''}
-                            onChange={(e) =>
-                                setEditData({ ...editData, coefficient_national_economy: e.target.value })
-                            }
-                            error={Boolean(errors.coefficient_national_economy)}
-                            helperText={errors.coefficient_national_economy}
-                        />
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleEditClose}>Відміна</Button>
-                    <Button type="submit" form="edit-form" variant="contained" color="primary">
-                        Зберегти
-                    </Button>
-                </DialogActions>
-            </Dialog>
         </Container>
     );
 };
